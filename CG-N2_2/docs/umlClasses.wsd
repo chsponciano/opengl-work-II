@@ -1,0 +1,121 @@
+BBox : - _xMin : double
+BBox : + xMin : double <<get>> <<set>>
+BBox : - _xMax : double
+BBox : + xMax : double <<get>> <<set>>
+BBox : - _yMin : double
+BBox : + yMin : double <<get>> <<set>>
+BBox : - _yMax : double
+BBox : + yMax : double <<get>> <<set>>
+BBox : + _centro : Ponto4D
+BBox : + obterCentro : Ponto4D <<get>>
+BBox : - referencia : Objeto
+BBox : + BBox(referencia:Objeto)
+BBox : + DentroDaArea(ponto:Ponto4D) : bool
+BBox : + ProcessarCentro() : void
+BBox : + Atribuir(ponto:Ponto4D) : void
+BBox : + Atualizar(ponto:Ponto4D) : void
+BBox : + Desenhar() : void
+
+Cor : - _red : float
+Cor : + Red : float <<get>> <<set>>
+Cor : - _green : float
+Cor : + Green : float <<get>> <<set>>
+Cor : - _blue : float
+Cor : + Blue : float <<get>> <<set>>
+Cor : + Cor(red:float, green:float, blue:float)
+
+Mundo : - {static} instanciaMundo : Mundo = null
+Mundo : - Mundo(width:int, height:int)
+Mundo : + {static} GetInstance(width:int, height:int) : Mundo
+Mundo : - camera : Camera
+Mundo : # objetosLista : List<Objeto>
+Mundo : - objetoSelecionado : ObjetoAramado = null
+Mundo : - bBoxDesenhar : bool = false
+Mundo : - objetoNovo : ObjetoAramado = null
+Mundo : - objetoId : String = "A"
+Mundo : - criandoObjeto : bool = false
+Mundo : - movendoVertice : bool = false
+Mundo : - criandoFilho : bool = false
+Mundo : # <<override>> OnLoad(e:EventArgs) : void
+Mundo : # <<override>> OnUpdateFrame(e:FrameEventArgs) : void
+Mundo : # <<override>> OnRenderFrame(e:FrameEventArgs) : void
+Mundo : # <<override>> OnKeyDown(e:OpenTK.Input.KeyboardKeyEventArgs) : void
+Mundo : # <<override>> OnMouseMove(e:MouseMoveEventArgs) : void
+Mundo : # <<override>> OnMouseDown(e:OpenTK.Input.MouseButtonEventArgs) : void
+Mundo : - criarObjeto(mouseX:double, mouseY:double) : void
+Mundo : - criarFilho(mouseX:double, mouseY:double) : void
+Mundo : - selecionarObjeto(mouseX:double, mouseY:double) : void
+
+Objeto : # rotulo : string
+Objeto : - primitivaTipo : PrimitiveType
+Objeto : - _aberto : bool = false
+Objeto : + Aberto : bool <<get>> <<set>>
+Objeto : - _paiRef : Objeto
+Objeto : + PaiRef : Objeto <<get>> <<set>>
+Objeto : # PrimitivaTipo : PrimitiveType <<get>> <<set>>
+Objeto : - primitivaTamanho : float = 2
+Objeto : # PrimitivaTamanho : float <<get>> <<set>>
+Objeto : - bBox : BBox
+Objeto : + BBox : BBox <<get>> <<set>>
+Objeto : # objetosLista : List<Objeto>
+Objeto : + Matriz : Transformacao4D <<get>>
+Objeto : - _matriz : Transformacao4D
+Objeto : - {static} matrizTmpTranslacao : Transformacao4D
+Objeto : - {static} matrizTmpTranslacaoInversa : Transformacao4D
+Objeto : - {static} matrizTmpEscala : Transformacao4D
+Objeto : - {static} matrizTmpRotacao : Transformacao4D
+Objeto : - {static} matrizGlobal : Transformacao4D
+Objeto : + Objeto(rotulo:string, paiRef:Objeto)
+Objeto : + Desenhar() : void
+Objeto : # {abstract} DesenharAramado() : void
+Objeto : + FilhoAdicionar(filho:Objeto) : void
+Objeto : + FilhoRemover(filho:Objeto) : void
+Objeto : # {abstract} PontosExibir() : void
+Objeto : + PontosExibirObjeto() : void
+Objeto : + ExibeMatriz() : void
+Objeto : + AtribuirIdentidade() : void
+Objeto : + TranslacaoXY(tx:double, ty:double) : void
+Objeto : + EscalaXY(Sx:double, Sy:double) : void
+Objeto : + EscalaXYBBox(escala:double) : void
+Objeto : + RotacaoZ(angulo:double) : void
+Objeto : + RotacaoZBBox(angulo:double) : void
+Objeto : + RemoverFilho(objeto:Objeto) : void
+Objeto : + DistanciaParaOCentro(ponto:Ponto4D) : Ponto4D
+
+ObjetoAramado : - PrimitivaCor : Cor
+ObjetoAramado : # pontosLista : List<Ponto4D>
+ObjetoAramado : + ObjetoAramado(rotulo:string, paiRef:Objeto)
+ObjetoAramado : # <<override>> DesenharAramado() : void
+ObjetoAramado : + PontosAdicionar(pto:Ponto4D) : void
+ObjetoAramado : + PontosRemoverUltimo() : void
+ObjetoAramado : # PontosRemoverTodos() : void
+ObjetoAramado : + PontosUltimo() : Ponto4D
+ObjetoAramado : # <<override>> PontosExibir() : void
+ObjetoAramado : + AddRed() : void
+ObjetoAramado : + AddGreen() : void
+ObjetoAramado : + AddBlue() : void
+Objeto <|-down- ObjetoAramado
+
+Poligono : - verticeSelecionado : Ponto4D = null
+Poligono : + VerticeSelecionado : Ponto4D <<get>>
+Poligono : - open : bool = false
+Poligono : + Poligono(rotulo:string, paiRef:Objeto)
+Poligono : + SelecionarVertice(ponto:Ponto4D) : void
+Poligono : - GetVerticeMaisProximo(ponto:Ponto4D) : Ponto4D
+Poligono : + RemoverVerticeSelecionado() : void
+Poligono : + SetVerticeSelecionado(vertice:Ponto4D) : void
+Poligono : - GetDistancia(ponto1:Ponto4D, ponto2:Ponto4D) : double
+Poligono : + PontoDentroDoObjeto(ponto:Ponto4D) : bool
+Poligono : + GetObjetoSelecao(ponto:Ponto4D) : ObjetoAramado
+ObjetoAramado <|-down- Poligono
+
+ScanLine : + Y : double
+ScanLine : - pontos : List<Ponto4D>
+ScanLine : + ScanLine(Y:double)
+ScanLine : + CalcularScanExtrema(p1:Ponto4D, p2:Ponto4D) : Ponto4D
+ScanLine : + InteseccoesImparesNaEsquerdaDireita(ponto:Ponto4D) : bool
+
+Objeto -right- BBox
+ObjetoAramado -left- Cor
+Poligono -left- ScanLine
+Mundo -down- Objeto
